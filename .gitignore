@@ -3,7 +3,6 @@ node_modules
 *.d.ts
 /yarn.lock
 /dist
-/index.js
 /index.dev.js
 /test/samples/_
 /demos/shimport.js
