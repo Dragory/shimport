@@ -93,11 +93,23 @@ function exportDecl(str: string, start: number, c: number) {
 	while (str[c] && /\S/.test(str[c])) c += 1;
 	while (str[c] && !/\S/.test(str[c])) c += 1;
 
-	const nameStart = c;
+	let nameStart = c;
 	while (str[c] && !punctuatorChars.test(str[c]) && !isWhitespace(str[c])) c += 1;
-	const nameEnd = c;
+	let nameEnd = c;
 
-	const name = str.slice(nameStart, nameEnd);
+	let name = str.slice(nameStart, nameEnd);
+
+	// Fix for async function exports from https://github.com/Rich-Harris/shimport/issues/40#issuecomment-782445325
+	if (name === 'function') {
+		while (str[c] && /\S/.test(str[c])) { c += 1; }
+		while (str[c] && !/\S/.test(str[c])) { c += 1; }
+
+		nameStart = c;
+		while (str[c] && !punctuatorChars.test(str[c]) && !isWhitespace(str[c])) { c += 1; }
+		nameEnd = c;
+
+		name = str.slice(nameStart, nameEnd);
+	}
 
 	return {
 		start,
